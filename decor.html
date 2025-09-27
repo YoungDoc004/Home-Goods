@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decor | Home Goods Finds</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      :root {
+        --muted: #666;
+        --card: #fff;
+      }
+
+      /* General */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #fafafa;
+        color: #333;
+      }
+
+      header {
+        position: relative;
+        background: var(--card);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06);
+        z-index: 1000;
+      }
+
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #7c3aed, #ec4899);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+      }
+
+      /* Nav */
+      .main-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: #333;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 105px;
+        right: 0;
+        flex-direction: column;
+        width: 210px;
+        background-color: rgba(0, 0, 0, 0.3);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        list-style: none;
+        padding: 0;
+      }
+
+      .nav-links li a {
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        padding: 1rem;
+        display: block;
+        border-bottom: 1px solid #555;
+      }
+
+      .nav-links :hover {
+        text-decoration: underline;
+        color: #ffcc00;
+      }
+
+      .hamburger {
+        cursor: pointer;
+      }
+
+      .menu-toggle {
+        display: none;
+      }
+
+      .bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px auto;
+        background-color: #fff;
+        transition: all 0.3s ease-in-out;
+      }
+
+      #menu-toggle:checked ~ .nav-links {
+        max-height: 500px;
+      }
+
+      #menu-toggle:checked ~ .hamburger .bar:nth-child(2) {
+        opacity: 0;
+      }
+
+      #menu-toggle:checked ~ .hamburger .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      #menu-toggle:checked ~ .hamburger .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      /* HERO / BANNER */
+      .hero {
+        position: relative;
+        width: 100%;
+        min-height: 70vh; /* banner height */
+        background: url("images/img\ decor.png") center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        border-radius: 10px; /* optional: matches your card style */
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* dark overlay for readability */
+        border-radius: 10px;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        line-height: 1.6;
+      }
+
+      /* RESPONSIVE FIXES */
+      @media (max-width: 900px) {
+        .hero {
+          min-height: 60vh;
+          padding: 1.5rem;
+        }
+        .hero h1 {
+          font-size: 2.2rem;
+        }
+        .hero p {
+          font-size: 1.1rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .hero {
+          min-height: 50vh;
+          padding: 1rem;
+        }
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+        .hero p {
+          font-size: 1rem;
+        }
+      }
+
+      /* Products Grid */
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        padding: 1.5rem;
+      }
+
+      .product-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+      }
+
+      .product-card h3 {
+        font-size: 1.1rem;
+        margin: 0.5rem 0;
+      }
+
+      .product-card .rating {
+        font-size: 0.9rem;
+        color: #f59e0b;
+      }
+
+      .product-card .price {
+        font-weight: bold;
+        margin: 0.5rem 0;
+      }
+
+      .product-card .desc {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        color: #444;
+      }
+
+      .product-card .btn,
+      .product-card .btn-pin {
+        padding: 0.5rem;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+
+      .product-card .btn {
+        background: #7c3aed;
+        color: #fff;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-card .btn-pin {
+        background: #eee;
+      }
+
+      /* Back to Top */
+      #backToTop {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+        background-color: #7c3aed;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        pointer-events: none;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        z-index: 1000;
+      }
+
+      #backToTop.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Footer */
+      footer {
+        color: var(--muted);
+        text-align: center;
+        margin: 28px 0;
+      }
+
+      .disclaimer {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 24px 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">
+          <div class="logo">HG</div>
+          <div>
+            <div style="font-weight: 700">Home Goods Finds</div>
+            <div style="font-size: 12px; color: var(--muted)">
+              Curated Amazon picks for You
+            </div>
+          </div>
+        </div>
+        <nav class="main-nav">
+          <input type="checkbox" id="menu-toggle" class="menu-toggle" />
+          <label for="menu-toggle" class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </label>
+
+          <ul class="nav-links">
+            <li>
+              <a href="home_goods_affiliate_static.html"><b>Home</b></a>
+            </li>
+            <li>
+              <a href="#"><b>Blog</b></a>
+            </li>
+            <li>
+              <a href="decor.html"><b>Decor</b></a>
+            </li>
+            <li>
+              <a href="kitchen.html"><b>Kitchen</b></a>
+            </li>
+            <li>
+              <a href="improvement.html"><b>Improvement</b></a>
+            </li>
+            <li>
+              <a href="organization.html"><b>Organization</b></a>
+            </li>
+            <li>
+              <a href="eco-friendly.html"><b>Eco-Friendly</b></a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <!-- ✅ Hero/Banner Section -->
+        <section class="hero category-hero">
+          <section class="hero category-hero">
+            <div class="hero-content">
+              <h1>Top Decor Finds</h1>
+              <p>
+                From bold accents to subtle textures, our favorite decor finds bring comfort, beauty, and personality to your space.
+              </p>
+            </div>
+          </section>
+        </section>
+
+        <!-- ✅ Products Section -->
+        <section id="products-decor" class="section-card">
+          <div class="section-header">
+            <h2>Decor Picks</h2>
+            <p>Elevate every corner of your home wth simple, modern design</p>
+          </div>
+
+          <div class="products-grid">
+            <div class="product-card">
+              <img
+                src="https://images.unsplash.com/photo-1567016527051-3b06b8c7d1b4?auto=format&fit=crop&w=400&q=80"
+                alt="Compact Air Fryer (3.5L)"
+              />
+              <h3>Compact Air Fryer (3.5L)</h3>
+              <div class="rating">★★★★☆ <span>(4.6)</span></div>
+              <p class="price">$59.99</p>
+              <p class="desc">
+                Crispy fries without the guilt. This compact 3.5L air fryer is
+                perfect for small kitchens, dorms, or anyone short on counter
+                space.
+              </p>
+              <a href="#" class="btn">View on Amazon</a>
+              <button class="btn-pin">Pin it</button>
+            </div>
+
+            <div class="product-card">
+              <img
+                src="https://images.unsplash.com/photo-1606813909365-d422d9d37db0?auto=format&fit=crop&w=400&q=80"
+                alt="Stainless Steel Mixing Bowl Set (5 pcs)"
+              />
+              <h3>Stainless Steel Mixing Bowl Set (5 pcs)</h3>
+              <div class="rating">★★★★☆ <span>(4.8)</span></div>
+              <p class="price">$24.99</p>
+              <p class="desc">
+                Durable, stackable bowls for all your mixing and prep needs.
+              </p>
+              <a href="#" class="btn">View on Amazon</a>
+              <button class="btn-pin">Pin it</button>
+            </div>
+
+            <div class="product-card">
+              <img
+                src="https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?auto=format&fit=crop&w=400&q=80"
+                alt="Coffee Grinder with Adjustable Settings"
+              />
+              <h3>Coffee Grinder with Adjustable Settings</h3>
+              <div class="rating">★★★★☆ <span>(4.4)</span></div>
+              <p class="price">$39.50</p>
+              <p class="desc">
+                Grind your coffee beans to perfection with adjustable settings,
+                ensuring a fresh and flavorful cup every time.
+              </p>
+              <a href="#" class="btn">View on Amazon</a>
+              <button class="btn-pin">Pin it</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <button id="backToTop" aria-label="Back to top">↑</button>
+
+      <div class="disclaimer">
+        <strong>
+          We only recommend products we’ve tested or genuinely love. If you buy
+          through our links, we may earn a commission at no extra cost to you.
+        </strong>
+      </div>
+
+      <footer>
+        <div>
+          © <span id="yr"></span> Home Goods Finds — Affiliate disclosure
+          applies.
+        </div>
+      </footer>
+    </div>
+
+    <script src="overlay.js"></script>
+    <script>
+      document.getElementById("yr").textContent = new Date().getFullYear();
+
+      const btn = document.getElementById("backToTop");
+      const showAfter = 300;
+      window.addEventListener("scroll", () => {
+        btn.classList.toggle("show", window.scrollY > showAfter);
+      });
+      btn.addEventListener("click", () =>
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      );
+    </script>
+  </body>
+</html>

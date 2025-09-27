@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog | Home Goods Finds</title>
+
+    <style>
+      .blog-hero {
+        text-align: center;
+        padding: 4rem 1rem 2rem;
+      }
+      .blog-hero h1 {
+        margin-bottom: 0.5rem;
+      }
+      .blog-hero p {
+        color: var(--muted);
+        font-size: 1.1rem;
+      }
+
+      .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .post-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .post-meta {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .post-meta .category {
+        margin: 0 0.5rem;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .post-actions {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      footer {
+        color: var(--muted);
+        text-align: center;
+        margin: 28px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero blog-hero">
+      <div>
+        <h1>Latest from the Home Goods Finds Blog</h1>
+        <p>
+          Get styling tips, decorating how-tos, and Pinterest inspiration—all
+          featuring our favorite Amazon home goods.
+        </p>
+      </div>
+    </section>
+
+    <section id="posts" class="section-card">
+      <div class="posts-grid">
+        <!-- Example Post Card -->
+        <article
+          class="post-card"
+          itemscope
+          itemtype="http://schema.org/BlogPosting"
+        >
+          <a href="post1.html" class="post-thumb">
+            <img
+              src="https://images.unsplash.com/…?q=80&w=400"
+              alt="Rose gold kitchen gadgets"
+              loading="lazy"
+              itemprop="image"
+            />
+          </a>
+          <div class="post-meta">
+            <time datetime="2025-09-10" itemprop="datePublished"
+              >Sep 10, 2025</time
+            >
+            <span class="category">Kitchen</span>
+            <span class="read-time">3 min read</span>
+          </div>
+          <h2 itemprop="headline">
+            <a href="post1.html">Top 10 Kitchen Gadgets for Small Apartments</a>
+          </h2>
+          <p itemprop="description">
+            Save counter space and time with these compact, high-impact kitchen
+            tools that Pinterest users love.
+          </p>
+          <div class="post-actions">
+            <a href="post1.html" class="btn">Read more</a>
+            <button class="btn-pin">Pin post</button>
+          </div>
+        </article>
+        <!-- Repeat .post-card for each article -->
+      </div>
+
+      <!-- Optional: Load More or Pagination -->
+      <div class="pagination">
+        <button id="loadMore" class="btn">Load more posts</button>
+        <!-- Or links: <a href="?page=2">Next →</a> -->
+      </div>
+    </section>
+
+    <section id="subscribe" class="section-card">
+      <h3>Get weekly product picks & Pinterest tips</h3>
+      <form
+        class="subscribe-form"
+        onsubmit="event.preventDefault(); /* integrate your service */"
+      >
+        <input type="email" placeholder="Your email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+
+    <script>
+      (function () {
+        const btn = document.getElementById("loadMore");
+        let page = 1;
+
+        btn.addEventListener("click", async () => {
+          page++;
+          btn.disabled = true;
+          btn.textContent = "Loading…";
+          const res = await fetch(`posts-page-${page}.html`);
+          const html = await res.text();
+          // Extract .post-card HTML from response
+          const temp = document.createElement("div");
+          temp.innerHTML = html;
+          const newCards = temp.querySelectorAll(".post-card");
+          document.querySelector(".posts-grid").append(...newCards);
+          btn.disabled = false;
+          btn.textContent = "Load more posts";
+          // Optional: hide button if no more pages
+        });
+      })();
+    </script>
+
+    <footer>
+      <div>
+        © <span id="yr"></span> Home Goods Finds — Affiliate disclosure applies.
+      </div>
+    </footer>
+  </body>
+</html>

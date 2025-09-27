@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Home Goods Finds — Curated Amazon Picks</title>
+    <meta
+      name="description"
+      content="Curated Amazon home-goods that convert well on Pinterest: kitchen gadgets, decor, organizational products, and eco-friendly finds."
+    />
+    <!-- Open Graph / Pinterest-friendly meta -->
+    <meta
+      property="og:title"
+      content="Home Goods Finds — Curated Amazon Picks"
+    />
+    <meta
+      property="og:description"
+      content="Amazon home-goods hand-picked for Pinterest. Tall images, product roundups, and buying links."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://images.unsplash.com/photo-1567016527051-3b06b8c7d1b4?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=example"
+    />
+
+    <style>
+      :root {
+        --bg: #f7f7f8;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --accent: #111827;
+        --cta: #f59e0b;
+        --maxw: 1100px;
+        --radius: 14px;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--accent);
+        line-height: 1.45;
+      }
+      .wrap {
+        max-width: var(--maxw);
+        margin: 32px auto;
+        padding: 20px;
+      }
+
+      header {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06);
+      }
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #7c3aed, #ec4899);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+      }
+      nav a {
+        margin-left: 18px;
+        color: var(--muted);
+        text-decoration: none;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      /* Overlay base (hidden) */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      /* Show overlay */
+      .overlay.open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Close (×) button */
+      .close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 2rem;
+        background: none;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* Container for category buttons */
+      .overlay-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        width: 80%;
+        max-width: 600px;
+        margin-top: 2rem;
+      }
+
+      /* Individual link styles */
+      .overlay-btn {
+        display: block;
+        text-align: center;
+        padding: 1rem;
+        background: #fff;
+        color: #333;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background 0.2s;
+      }
+
+      .overlay-btn:hover {
+        background: #f5f5f5;
+      }
+
+      /* Underline Product on hover */
+      #productBtn:hover {
+        text-decoration: underline;
+      }
+
+      /* Mobile tweaks: stack buttons, larger tap targets */
+      @media (max-width: 600px) {
+        .overlay-content {
+          grid-template-columns: 1fr;
+        }
+        .overlay-btn {
+          padding: 1.5rem;
+          font-size: 1.2rem;
+        }
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 460px;
+        gap: 28px;
+        margin-top: 26px;
+        align-items: center;
+      }
+      .hero h1 {
+        font-size: 34px;
+        margin: 0 0 10px;
+      }
+      .hero p {
+        color: var(--muted);
+        margin: 0;
+      }
+      .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: #111827;
+        color: #fff;
+      }
+      .btn-outline {
+        border: 1px solid #e6e7eb;
+        color: var(--accent);
+      }
+
+      /* Products grid */
+      .section-card {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 18px;
+        margin-top: 26px;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+      }
+      .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-top: 14px;
+      }
+      .product {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #f0f0f2;
+      }
+      .product img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        display: block;
+      }
+      .p-body {
+        padding: 12px;
+      }
+      .price {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+      }
+      .amazon {
+        background: var(--cta);
+        color: #fff;
+        padding: 8px 10px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .pin {
+        border: 1px solid #e6e7eb;
+        padding: 8px 10px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--accent);
+      }
+
+      /* Blog list */
+      .posts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .post {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .post img {
+        width: 110px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      footer {
+        color: var(--muted);
+        text-align: center;
+        margin: 28px 0;
+      }
+
+      /* styles.css */
+
+/* Hide only visually but keep accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Confirmation message starts hidden */
+.confirmation-message {
+  display: none;
+  color: green;
+  margin-top: 12px;
+}
+
+/* Optionally, add a simple fade-in for the confirmation */
+.confirmation-message.show {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(2, 6, 23, 0.45);
+        padding: 20px;
+      }
+      .modal.show {
+        display: flex;
+      }
+      .modal-card {
+        background: #fff;
+        width: 100%;
+        max-width: 900px;
+        border-radius: 12px;
+        overflow: auto;
+        max-height: 86vh;
+      }
+      .modal-card .m-body {
+        padding: 18px;
+      }
+
+      @media (max-width: 880px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .hero img {
+          height: 260px;
+        }
+        .product img {
+          height: 260px;
+        }
+      }
+
+      .affiliate-disclosure {
+  background: #fff3cd; /* light yellow highlight */
+  padding: 10px;
+  border: 1px solid #ffeeba;
+  animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: #fff3cd; }
+  50% { background-color: #ffe08a; }
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">
+          <div class="logo">HG</div>
+          <div>
+            <div style="font-weight: 700">Home Goods Finds</div>
+            <div style="font-size: 12px; color: var(--muted)">
+              Curated Amazon picks for You
+            </div>
+          </div>
+        </div>
+        <nav>
+          <a
+            href="#!"
+            id="productBtn"
+            aria-controls="productsOverlay"
+            aria-expanded="false"
+            >Products</a
+          >
+          <a href="#">Blog</a>
+          <a href="#request">Request A Product</a>
+        </nav>
+      </header>
+
+      <!-- Full-screen products overlay -->
+      <div
+        id="productsOverlay"
+        class="overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+      >
+        <button id="closeOverlay" class="close-btn" aria-label="Close menu">
+          &times;
+        </button>
+        <div class="overlay-content">
+          <a href="kitchen.html" class="overlay-btn">Kitchen</a>
+          <a href="decor.html" class="overlay-btn">Decor</a>
+          <a href="improvement.html" class="overlay-btn">Improvement</a>
+          <a href="organization.html" class="overlay-btn">Organization</a>
+          <a href="eco-friendly.html" class="overlay-btn">Eco-Friendly</a>
+        </div>
+      </div>
+
+      <main>
+        <section class="hero">
+          <div>
+            <h1>Make Your Home Prettier, Easier, And More Sustainable</h1>
+            <p>
+              We believe shopping shouldn't feel overwhelming. That's why we've done the hard work of searching, comparing, and narrowing down Amazon's endless options so you only see the <b>best picks in minimalist, modern living</b>. <br><br> From home essentials and decor to gadgets and lifestyle products, every item we feature is <b>carefully chosen for quality, function, and clean design</b>. No clutter, no noise -- just products that add value to your everyday life. <br><br><br>
+              <b style="font-size: larger; color: #111827;">What You'll Find Here</b>
+              <br>
+              <ul>
+                <li>Hand-picked Amazon products you can trust</li>
+                <li>A clutter-free shopping experience -- only the best makes the list</li>
+                <li>Simple, stylish essentials that fit your lifestyle</li>
+                <li>Direct links to Amazon for secure and easy checkout</li>
+              </ul>
+              <br><br>
+              Whether you're refreshing your home, upgrading your tools, or discovering something new , we make it simple to shop smarter, not harder. <br><br>Start exploring today -- because less really can be more.
+            </p>
+
+            <div style="margin-top: 16px">
+              <a class="btn btn-primary" href="#products">See top picks</a>
+              <a
+                class="btn btn-outline"
+                href="blog.html"
+                style="margin-left: 10px"
+                >Read the blog</a
+              >
+            </div>
+
+            <div style="margin-top: 18px; font-size: 13px; color: var(--muted)">
+              <div class="affiliate-disclosure">
+                <strong>Affiliate disclosure:</strong> This site contains Amazon
+                affiliate links. Purchases may earn a commission at no extra cost
+                to you.
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <img
+              src="images/IMG_1870.JPG"
+              alt="Stylish home goods"
+              style="
+                width: 100%;
+                border-radius: 12px;
+                object-fit: cover;
+                height: 420px;
+              "
+            />
+            <div style="font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center">
+              <i>"The best of Amazon, hand-picked for you."</i>
+            </div>
+          </div>
+        </section>
+
+        <section id="products" class="section-card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <h2 style="margin: 0">Featured Products</h2>
+            <div style="color: var(--muted)">Hand-picked just for you</div>
+          </div>
+
+          <div class="products" id="products-grid">
+            <!-- Product cards are inserted here by the small script below -->
+          </div>
+        </section>
+
+        <section id="blog" class="section-card">
+          <h2 style="margin: 0">Latest posts</h2>
+          <div class="posts" id="posts-list">
+            <!-- Posts injected by script -->
+          </div>
+        </section>
+
+        <section 
+  id="request" 
+  class="section-card" 
+  role="form" 
+  aria-labelledby="request-heading"
+>
+  <h3 id="request-heading" style="margin: 0">
+    Request a Product
+  </h3>
+  <p style="color: var(--muted); margin-top: 6px">
+    Don’t see what you need? Tell us which product you’re looking for.
+  </p>
+
+  <form class="request-form" style="margin-top: 10px;">
+    <label for="product-name" class="sr-only">
+      Product name
+    </label>
+    <input
+      id="product-name"
+      name="product"
+      type="text"
+      placeholder="Enter product name"
+      required
+      style="padding: 0.5rem; width: 100%; box-sizing: border-box;"
+    />
+    <button 
+      type="submit" 
+      style="margin-top: 8px; padding: 0.5rem 1rem;"
+    >
+      Request Product
+    </button>
+  </form>
+
+  <div 
+    class="confirmation-message" 
+    role="status" 
+    aria-live="polite" 
+    style="display: none; color: green; margin-top: 12px;"
+  >
+    Thank you! Your email client is opening now.
+  </div>
+</section>
+
+        <footer>
+          <div>
+            © <span id="yr"></span> Home Goods Finds — Affiliate disclosure
+            applies.
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <!-- Simple modal and data script -->
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f3f4f6;
+          "
+        >
+          <div style="font-weight: 700" id="m-title">Post title</div>
+          <button
+            onclick="closeModal()"
+            style="
+              border: none;
+              background: none;
+              font-weight: 700;
+              padding: 8px;
+              cursor: pointer;
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <div class="m-body" id="m-body">Post content</div>
+      </div>
+    </div>
+
+    <script>
+      // Replace this tag with your Amazon Associates tag: e.g. 'yourtag-20'
+      const AMAZON_TAG = "your-amazon-tag-20";
+
+      // Sample data (replace with real product data and images)
+      const PRODUCTS = [
+        {
+          asin: "B08EXAMPLE1",
+          title: "Stainless Steel Air Fryer (4.5L)",
+          price: "$79.99",
+          img: "https://images.unsplash.com/photo-1586201375761-83865001eab9?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=example",
+        },
+        {
+          asin: "B07EXAMPLE2",
+          title: "Minimalist Throw Pillow Set (2-pack)",
+          price: "$29.99",
+          img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=example",
+        },
+        {
+          asin: "B09EXAMPLE3",
+          title: "Bamboo Utensil Set (12 pcs)",
+          price: "$16.50",
+          img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=example",
+        },
+      ];
+
+      const POSTS = [
+        {
+          id: "p1",
+          title: "Top 10 Kitchen Gadgets for Small Apartments",
+          excerpt:
+            "Save counter space and time with these compact, high-impact kitchen gadgets that Pinterest users love.",
+          image:
+            "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=example",
+          content:
+            "Full post content goes here. Replace with your real blog post and affiliate links.",
+        },
+        {
+          id: "p2",
+          title: "How To Style A Minimalist Living Room",
+          excerpt:
+            "Curate the calm: simple decor, essential furniture, and a few Pinterest-friendly shots.",
+          image:
+            "https://images.unsplash.com/photo-1493666438817-866a91353ca9?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=example",
+          content: "Tips and product ideas for a minimalist living room.",
+        },
+      ];
+
+      function amazonUrl(asin) {
+        // Basic ASIN-style link; for audiences outside the US you may want locale-specific links.
+        return `https://www.amazon.com/dp/${asin}/?tag=${AMAZON_TAG}`;
+      }
+
+      function pinterestCreateUrl(pageUrl, media, desc) {
+        return `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
+          pageUrl
+        )}&media=${encodeURIComponent(media)}&description=${encodeURIComponent(
+          desc
+        )}`;
+      }
+
+      function renderProducts() {
+        const grid = document.getElementById("products-grid");
+        PRODUCTS.forEach((p) => {
+          const el = document.createElement("article");
+          el.className = "product";
+          el.innerHTML = `
+          <img src="${p.img}" alt="${p.title}">
+          <div class="p-body">
+            <div style="font-weight:600">${p.title}</div>
+            <div class="price">${p.price}</div>
+            <div class="actions">
+              <a class="amazon" href="${amazonUrl(
+                p.asin
+              )}" target="_blank" rel="noopener">View on Amazon</a>
+              <a class="pin" href="${pinterestCreateUrl(
+                window.location.href,
+                p.img,
+                p.title + " — " + p.price
+              )}" target="_blank" rel="noopener">Pin it</a>
+            </div>
+          </div>`;
+          grid.appendChild(el);
+        });
+      }
+
+      function renderPosts() {
+        const list = document.getElementById("posts-list");
+        POSTS.forEach((post) => {
+          const el = document.createElement("article");
+          el.className = "post";
+          el.innerHTML = `
+          <img src="${post.image}" alt="${post.title}">
+          <div>
+            <div style="font-weight:700">${post.title}</div>
+            <div style="color:var(--muted);font-size:13px;margin-top:6px">${
+              post.excerpt
+            }</div>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button onclick="openModal('${
+                post.id
+              }')" style="padding:8px 10px;border-radius:8px;border:1px solid #e6e7eb;background:#fff;cursor:pointer">Read more</button>
+              <a class="pin" href="${pinterestCreateUrl(
+                window.location.href,
+                post.image,
+                post.title
+              )}" target="_blank" rel="noopener">Pin post</a>
+            </div>
+          </div>`;
+          list.appendChild(el);
+        });
+      }
+
+      function openModal(id) {
+        const post = POSTS.find((p) => p.id === id);
+        if (!post) return;
+        document.getElementById("m-title").textContent = post.title;
+        document.getElementById(
+          "m-body"
+        ).innerHTML = `<img src="${post.image}" alt="${post.title}" style="width:100%;height:auto;border-radius:8px;margin-bottom:12px"><p style="color:var(--muted)">${post.content}</p>`;
+        const modal = document.getElementById("modal");
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+      }
+      function closeModal() {
+        const modal = document.getElementById("modal");
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
+      // Init
+      document.getElementById("yr").textContent = new Date().getFullYear();
+      renderProducts();
+      renderPosts();
+
+      // Accessibility: close modal on ESC
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      const productBtn = document.getElementById("productBtn");
+      const overlay = document.getElementById("productsOverlay");
+      const closeOverlay = document.getElementById("closeOverlay");
+
+      (function () {
+        const btn = document.getElementById("productBtn");
+        const overlay = document.getElementById("productsOverlay");
+        const closeBtn = document.getElementById("closeOverlay");
+        let focusable, firstEl, lastEl;
+
+        // Open overlay
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          overlay.classList.add("open");
+          overlay.setAttribute("aria-hidden", "false");
+          btn.setAttribute("aria-expanded", "true");
+          document.body.style.overflow = "hidden";
+          trapFocus();
+        });
+
+        // Close overlay
+        function closeMenu() {
+          overlay.classList.remove("open");
+          overlay.setAttribute("aria-hidden", "true");
+          btn.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+          btn.focus();
+        }
+
+        closeBtn.addEventListener("click", closeMenu);
+
+        // Click outside content to close
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) closeMenu();
+        });
+
+        // Escape key closes overlay
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && overlay.classList.contains("open")) {
+            closeMenu();
+          }
+          // Handle Tab for focus trap
+          if (e.key === "Tab" && overlay.classList.contains("open")) {
+            handleTab(e);
+          }
+        });
+
+        // Focus-trap setup
+        function trapFocus() {
+          focusable = overlay.querySelectorAll(
+            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          );
+          firstEl = focusable[0];
+          lastEl = focusable[focusable.length - 1];
+          firstEl.focus();
+        }
+
+        function handleTab(e) {
+          if (e.shiftKey) {
+            // Shift + Tab
+            if (document.activeElement === firstEl) {
+              e.preventDefault();
+              lastEl.focus();
+            }
+          } else {
+            // Tab
+            if (document.activeElement === lastEl) {
+              e.preventDefault();
+              firstEl.focus();
+            }
+          }
+        }
+      })();
+
+      const requestForm = document.querySelector('.request-form');
+const confirmation = document.querySelector('.confirmation-message');
+
+requestForm.addEventListener('submit', event => {
+  event.preventDefault();
+
+  // Grab and encode product name
+  const product = event.target.product.value.trim() || 'the product';
+  const mailtoLink = [
+    'mailto:you@yourdomain.com',
+    '?subject=' + encodeURIComponent(`Product Request: ${product}`),
+    '&body=' + encodeURIComponent(
+      `Hello,\n\nI’d love more information about "${product}".\n\nThank you!`
+    )
+  ].join('');
+
+  // Show confirmation message
+  confirmation.style.display = 'block';
+
+  // Open email client after a short delay
+  setTimeout(() => {
+    window.location.href = mailtoLink;
+  }, 500);
+});
+
+    </script>
+
+    <!-- Helpful comments for deployment
+    - Replace AMAZON_TAG with your Amazon Associates tag.
+    - Replace PRODUCTS and POSTS with real data and high-quality Pinterest-optimized images (tall, ideally 2:3 ratio).
+    - Hook the subscribe form to Mailchimp/ConvertKit or your chosen ESP.
+    - Consider adding structured data (JSON-LD) for articles & products and Open Graph tags for each post for better Pinterest rich pins.
+    - Deploy on GitHub Pages / Netlify / Vercel by pushing this single file or integrating into a static site generator.
+  --></body>
+</html>
